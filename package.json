@@ -1,0 +1,21 @@
+{
+  "name": "skill_temperature",
+  "version": "1.0.0",
+  "description": "Legge la temperatura memorizzata in DynamoDB",
+  "main": "index.js",
+  "scripts": {
+    "deploydev": "sls deploy --verbose --stage dev",
+    "deployprod": "sls deploy --verbose --stage prod",
+    "removedev": "sls remove --verbose --stage dev",
+    "removeprod": "sls remove --verbose --stage prod",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paolo Godino",
+  "license": "ISC",
+  "dependencies": {
+    "ask-sdk-core": "^2.12.1",
+    "ask-sdk-model": "^1.57.0",
+    "aws-sdk": "^2.1333.0",
+    "source-map-support": "^0.5.21"
+  }
+}

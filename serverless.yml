@@ -1,0 +1,49 @@
+service: skill-temperature
+
+frameworkVersion: '3'
+
+plugins:
+  - serverless-bundle
+  - serverless-alexa-skills
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  profile: alexa-academy
+  memorySize: 256
+  stage: ${opt:stage}
+  region: eu-west-1
+  versionFunctions: false
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: 
+            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/DHT11SENSOR-${opt:stage}
+          
+custom:
+  bundle:
+    linting: false
+  alexa: 
+    vendorId: ${file(./config.yml):vendorId}
+    skills:
+      - id: ${file(./config.yml):skillId}
+        manifest:
+          apis:
+            custom:
+              endpoint:
+                uri: 'arn:aws:lambda:eu-west-1:{AWS::AccountId}:function:${self:service}-${self:provider.stage}'
+              interfaces: []
+              protocolVersion: '3'
+          manifestVersion: '1.0'
+
+functions:
+  index:
+    name: ${self:service}-${self:provider.stage}
+    handler: src/index.handler
+    environment:
+      tablename: DHT11SENSOR-${opt:stage}
+    events:
+      - alexaSkill: ${file(./config.yml):skillId}
